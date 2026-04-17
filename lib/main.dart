@@ -1,9 +1,17 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ui_class/firebase_options.dart';
 import 'package:flutter_ui_class/providers/task_management_provider.dart';
 import 'package:flutter_ui_class/screens/UI_page.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const FlutterUIApp());
 }
 
@@ -12,25 +20,25 @@ class FlutterUIApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_)=> TaskManagementProvider()),
+        ChangeNotifierProvider(
+          create: (_) => TaskManagementProvider(),
+        ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
-        home: const HomePage(title: 'FLUTTER UI DEMO'),
+        home: const HomePage(title: 'Task-Manager'),
       ),
     );
   }
 }
 
-
-
-class HomePage extends StatefulWidget { 
+class HomePage extends StatefulWidget {
   final String title;
 
   const HomePage({super.key, required this.title});
@@ -44,7 +52,6 @@ class _HomePageState extends State<HomePage> {
 
   void _incrementCounter() {
     _counter++;
-    print('Counter value: $_counter');
     setState(() {});
   }
 
@@ -54,7 +61,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(
           widget.title,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w900,
             color: Colors.white,
@@ -63,12 +70,11 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.purpleAccent,
       ),
 
+      // ✅ FIXED HERE (removed const from parent)
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
@@ -83,38 +89,30 @@ class _HomePageState extends State<HomePage> {
             border: Border.all(color: Colors.grey, width: .5),
             color: Colors.grey.withAlpha(50),
           ),
-
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-
             children: [
-              Text('Counter app', style: TextStyle(fontSize: 24)),
+              const Text('Counter app', style: TextStyle(fontSize: 24)),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-
                 children: [
-                  Text('The current value is', style: TextStyle(fontSize: 15)),
-
-                  SizedBox(width: 5),
-
+                  const Text('The current value is'),
+                  const SizedBox(width: 5),
                   Text(
                     _counter.toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 21,
                       fontWeight: FontWeight.w900,
                       color: Colors.purpleAccent,
                     ),
                   ),
-
-                  SizedBox(width: 5),
-
-                  Icon(Icons.timelapse, color: Colors.purpleAccent, size: 30),
+                  const SizedBox(width: 5),
+                  const Icon(Icons.timelapse, color: Colors.purpleAccent),
                 ],
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -124,35 +122,23 @@ class _HomePageState extends State<HomePage> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.purpleAccent,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 12,
-                      ),
                     ),
-                    child: Text('Increment Counter'),
+                    child: const Text('Increment Counter'),
                   ),
 
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
 
                   IconButton(
-                    onPressed: (){
-                      // home -> page 2 -> page 3 -> page 4 -> page 5
-
-                      // |Page 5 |
-                      // |Page 4 |
-                      // |Page 3 |
-                      // |Page 2 |  
-                      // |Home   |
-
+                    onPressed: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => UiPage(),)
+                        MaterialPageRoute(
+                          builder: (context) => const UiPage(),
+                        ),
                       );
-
-
                     },
                     color: Colors.purpleAccent,
                     iconSize: 40,
-                    icon: Icon(Icons.arrow_circle_right),
+                    icon: const Icon(Icons.arrow_circle_right),
                   ),
                 ],
               ),
@@ -162,11 +148,7 @@ class _HomePageState extends State<HomePage> {
       ),
 
       floatingActionButton: FloatingActionButton(
-        // onPressed: _incrementCounter,
-        onPressed: () {
-          _incrementCounter();
-        },
-
+        onPressed: _incrementCounter,
         child: const Icon(Icons.add),
       ),
     );
