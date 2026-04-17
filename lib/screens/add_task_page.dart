@@ -11,7 +11,6 @@ class AddTaskPage extends StatefulWidget {
   @override
   State<AddTaskPage> createState() => _AddTaskPageState();
 }
-
 class _AddTaskPageState extends State<AddTaskPage> {
   final _titleController = TextEditingController();
   final _assignedToController = TextEditingController();
